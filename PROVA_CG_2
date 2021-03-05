@@ -1,0 +1,170 @@
+1.
+
+void drawLineByPoints(int x, int y, int endX, int lineSize, int gap)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(1, 0, 0);
+	glPointSize(1.0);
+
+	// Define se a linha vai ser pra esquerda ou direita no eixo X
+	if(x < endX)
+	{
+		// Enquanto a linha não atingir o ponto que ela ter q atingir continua
+		while (x <= endX) 
+		{
+
+			// Percorre uma quantidade de pixel equivalente ao tamano desejado da linha, enquanto vai printando pontos em cada pixel
+			for (int i = 0; i < lineSize; i++) 
+			{
+				glBegin(GL_POINTS);
+				x = x + 1;
+				glVertex2i(x, y);//360 é a altura
+				glEnd();
+			}
+
+			// Pula o espaço definido entre linhas e pontos
+			x = x + gap;
+
+			// Desenha ponto
+			glBegin(GL_POINTS);
+			glVertex2f(x, y); 		
+			glEnd();
+
+			// Pula espaço para proxima linha
+			x = x + gap;
+		}
+	}
+	else
+	{
+		// implementa para o outro lado
+	}	
+	
+	glFlush();
+}
+
+
+
+2.
+
+3.
+
+A imagem em questão pode ser montada de diversas formas, sejá por traçar 12 linhas em pontos compartilhados de forma a montar a cruz que é o objeto.
+
+[[DESENHA no papel]]
+
+4.
+
+point convert(point toBeConvertedP, int alturaUniverso, int larguraUniverso, int alturaJanSel, int larguraJanSel)
+{
+	point convertedP = new((toBeConvertedP.x * larguraJanSel)/larguraUniverso,
+							(((toBeConvertedP.y*(alturaJanSel * - 1))/ alturaJanSel) + alturaJanSel ) );
+
+	return convertedP; 
+}
+
+
+
+5.
+Uma imagem vetorial é formada a partir de representações geométricas, tendo definição em funções de elementos geométricos. Por muitas vezes ser definida através de representações geométricas, a imagem mantém a qualidade quando sofre transformações como resize, uma vez que só os parâmetros das funções geométricas mudam mas não as informações da imagem, mas essa qualidade vem ao custo de um processamento extra necessário.
+
+ Uma imagem matricial é definida de forma discreta, formada por elementos independentes, dispostos em uma matriz, cada célula da matriz tendo parte da informação que forma a imagem. A imagem matricial tem a vantagem de possibilitar dinamismo na hora de tratar a imagem, uma vez que é composta de informações separadas que podem ser trabalhadas unitariamente, mas que formam um todo em conjunto, mas isso vem ao custo do seu armazenamento que é maior devido ao fato de ter que armazenar informações referentes a todos os pontos da imagem.
+
+A conversão de imagens vetoriais para materiais é possível, mas ao custo da perda de informação, até porque toda transformação ou manipulação que se é feita em uma imagem vem ao custo de perda de informação. Mas a transformação de materiais em vetoriais não é possível uma vez que teria de se mapear diversos pixels e transformá-los em conjuntos de representações geométricas.
+
+6.
+Transformações geométricas tem um papel muito importante em manipular os objetos que terão sua imagem impressos na tela, são utilizadas na produção das projeções, são elas que possibilitam o uso de dados 3D a serem apresentados em 2D para o usuário.
+
+Translações
+
+Translações são as transformações de deslocamento, em linha reta. As translações possuem um fator de deslocamento associado a cada dimensão do espaço.
+
+
+
+A instrução utilizada no OpenGL é “glTranslatef(x, y, z);”
+
+Rotação
+
+Rotações são um giro em torno de um eixo em relação a um referencial. Os ângulos e distâncias são preservados em relação ao referencial.
+
+
+
+A instrução utilizada no OpenGl é “glRotate(angulo, x, y, z);”
+
+Escala
+
+Escala é aplicada em uma ou mais dimensões, é uma alteração dos valores o que dá um efeito de zoom, de mudar o 	“tamanho” do objeto. A mudança de escala preserva os ângulos, mas não é regra, mas preserva o paralelismo de linhas.
+
+
+A instrução utilizada no OpenGL é glScale(x, y, z);
+
+7.
+As transformações são rotação e translação, sendo a rotação deixando o objeto de cabeça para baixo e a translação o colocando na posição e o afastando do observador dando a perspectiva da mudança de tamanho do objeto.
+
+8.
+Para uma rotação qualquer nós precisamos de uma matriz de rotação que é defina da seguinte forma. Sendo a rotação sendo definida por um ângulo e um referencial, um eixo definido por um vetor.
+
+|cosB	-sinB	0 |
+|sinB	cosB	0 |sendo essa especificamente para a rotação entorno do eixo z, tendo então 
+|0	   0	1 |  sua coluna constante, e B sendo o ângulo da rotação.
+
+9.
+O processo utilizado é o processo de recorte. O processo de recorte consegue definir o que vai aparecer na imagem e o que não vai, e utiliza-se do cálculo dos recortes de retas que consiste de calcular as intersecções das retas com as bordas de uma janela de seleção. Também é utilizado o algoritmo de Cohen-Sutherland, que consiste em cálculos que descartam cálculos desnecessários que o algoritmo das intersecções faz.
+
+É de suma importância a necessidade do processo de recorte, uma vez que não é interessante que tudo apareça em cena a todo momento, como um jogo só demonstra o que o personagem enxerga, sendo necessário esconder coisas que o personagem não vê. 
+10.
+Phong propôs um modelo de colorização que gera imagens mais realistas devido ao seu cálculo para colorização que é aplicado ponto a ponto dos polígonos que constituem um objeto, o que contrasta com a abordagem da colorização constante (Bouknight), da aplicação ser feita no polígono como um todo. 
+
+(resultado do algoritmo de Bouknight)
+
+O algoritmo faz isso por interpolar as normais nos vértices, assim avaliando iluminação para cada um dos pixels que constituem o objeto.
+
+
+(resultado do algoritmo de Phong)
+
+11.
+No algoritmo de Pongo as normais são interpoladas no lugar das cores. Aplicando iluminação a cada ponto do polígono, assim produzindo resultados melhores.
+
+
+
+
+12.
+
+A visão/projeção em perspectiva é uma das projeções que geram imagens mais fidedignas à realidade devido a fatores como a perspectiva de distância nos objetos, sendo essa percepção funcionando da forma que os objetos ao se aproximarem do observador aparentam serem maiores e os objetos que estão mais distantes do observador se aparentam menores.
+
+
+(imagem retirada da apostila do professor Bruno Schneider)
+
+
+13.
+
+No mundo real os raios de luzes seguem o modelo do fluxo de saírem da fonte de luz, atingirem objetos e refletirem uma quantidade X e finalmente sendo observados por um observador qualquer. Essa abordagem quando aplicada a computação gráfica traz alguns problemas como calcular raios que no final das contas não contribuíram para formação da imagem, seja por não atingirem os objetos de interesse na construção da imagem ou por não acabarem no observador ou o fato de ter que calcular uma quantidade muito elevada de reflexões de um raio. 
+
+
+
+O algoritmo de Ray Tracing é uma técnica de renderização que resolve esses problemas por mapear cada um dos pixels do observador, “segui-los” durante seu percurso aos objetos e finalmente até a fonte de luz, efetivamente fazendo um processo inverso do processo “natural”.
+
+
+
+
+14.
+Rasterização é uma aproximação de primitivas matemáticas, que no fim são descritas em termos de vértices em uma matriz de conjunto de pixels, no final das contas tudo consiste em pegar uma imagem descrita por vetores gráficos (uma imagem vetorial) e transformar essa imagem em um conjunto de pixels que serão mostrados em uma tela. Durante esse processo técnicas de antialiasing podem ser utilizadas bem como é importante lembrar que eficiência e velocidade são fatores essenciais.
+
+O algoritmo de Bresenhan, que usarei como exemplo, é um algoritmo que utiliza-se somente de incrementação com somas e subtrações de inteiros, o que resolve o problema do uso do ponto flutuante. Ele faz isso por decidir se o próximo pixel vai ter coordenadas (x +1, y) ou (x +1, y+ ½) que é abaixo do ponto médio, calcula-se o ponto medio com relação ao semi-espaço definido na reta e verifica se o local analisando está sobre, abaixo ou acima da reta.
+
+15.
+
+
+
+
+
+
+
+https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glScale.xml
+https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTranslate.xml
+https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glRotate.xml
+https://developer.nvidia.com/discover/ray-tracing
+https://www.educba.com/ray-tracing-algorithm/
+https://www.geeksforgeeks.org/basic-transformations-opengl/
+http://orion.lcg.ufrj.br/cg/downloads/PDFs/16_LCG_Colorizacao.pdf
+Apostila de Computação Gráfica - Bruno de Oliveira Schneider 
+Computação Gráfica - Ana Paula Piovesan Melchiori
